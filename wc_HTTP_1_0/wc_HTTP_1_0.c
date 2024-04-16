@@ -61,7 +61,7 @@ int main() {
         }
 
         // Setto il puntatore al Nome o termino.
-        else if (i != 0 && hbuf[i] == '\n' && hbuf[i-1] == '\r') {
+        else if (i > 0 && hbuf[i] == '\n' && hbuf[i-1] == '\r') {
             hbuf[i-1] = 0; // Terminatore di stringa.
 
             /* Controllo se l'header è terminato.
