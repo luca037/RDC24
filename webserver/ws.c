@@ -148,7 +148,7 @@ int main(void) {
             write(s2, entity, 1000);
         }
 
-        //exit(0); // Per far terminare il processo figlio.
+        exit(0); // Per far terminare il processo figlio.
     }
 
     return 0;
