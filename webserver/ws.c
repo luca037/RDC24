@@ -74,7 +74,8 @@ int main(void) {
             exit(1);
         }
 
-        printf("\nClient port = %u, addr = %u\n", remote.sin_port, remote.sin_addr.s_addr);
+        // Stampo informazioni client.
+        printf("\nClient port = %u, addr = %u\n\n", htons(remote.sin_port), htons(remote.sin_addr.s_addr));
 
 // ### Parsing Header ###
         char hbuf[10000]; // Buffer header.
