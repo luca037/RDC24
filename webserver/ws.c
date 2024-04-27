@@ -130,7 +130,18 @@ int main(void) {
                                        // dell'header.
 
 // ### Response ###
-        /* Full-Response */
+        /* Gestione esecuzione comando. 
+           Controllo se il filename richiesto comincia con il path
+           speciale (che abbiamo scelto) "/exec/". */
+        if (!strncmp("/exec/", filename, 6)) {
+            // Prelevo il comando da eseguire.
+            char command[100];
+            sprintf(command, "%s > out.txt", filename + 6);
+            system(command);
+            filename = "/out.txt"; // Invio al client l'output del comando.
+        }
+
+        /* Full-Response: gestione file richiesto. */
         FILE* fin = fopen(filename + 1, "rt"); // Il '+1' per rimuovere il path
                                                // relativo.
         if (fin == NULL) {
@@ -140,7 +151,7 @@ int main(void) {
             exit(1);
         }
 
-        sprintf(response, "HTTP/1.1 200 OK\r\nConnection:close\r\n\r\n");
+        sprintf(response, "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Type: text/html\r\nDate: Sat, 27 Apr 2024 10:27:00 GMT\r\n\r\n");
         write(s2, response, strlen(response));
 
         char entity[1000];
