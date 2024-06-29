@@ -40,7 +40,6 @@ int main(void) {
     }
 
 // ### Bind ###
-    /* Rendo passovo il socket sfruttando la bind */
     t = bind(s, (struct sockaddr*) &srvaddr, sizeof(struct sockaddr_in));
     if (t == -1) {
         perror("Bind fails");
