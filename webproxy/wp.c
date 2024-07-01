@@ -219,7 +219,7 @@ int main(void) {
 
             struct sockaddr_in server;
             server.sin_family = AF_INET;
-            server.sin_port = htons(80);
+            server.sin_port = htons(atoi(port));
             server.sin_addr.s_addr = *(unsigned*) (he->h_addr);
 
             t = connect(s3, (struct sockaddr*) &server, sizeof(struct sockaddr_in));
