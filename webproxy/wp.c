@@ -52,7 +52,7 @@ int main(void) {
 // ### Listen ###
     /* Rendo il socket passivo e fisso la dimensione della coda delle richieste
        pendenti a 5. */
-    t = listen(s, 5);
+    t = listen(s, 10);
     if (t == -1) {
         perror("Listen fails");
         return 1;
@@ -65,7 +65,7 @@ int main(void) {
 
     int s2; // File descriptor del socket tornato da accept.
     while (1) {
-        close(s2);
+        //close(s2);
         s2 = accept(s, (struct sockaddr*) &remote, &len);
         
         /* Faccio gestire ai processi figli le richieste */
@@ -179,7 +179,7 @@ int main(void) {
             struct sockaddr_in server;
             server.sin_family = AF_INET;
             server.sin_port = htons(80);
-            server.sin_addr.s_addr = *(unsigned*) (he->h_addr);
+            server.sin_addr.s_addr = *(unsigned int*) (he->h_addr);
 
             t = connect(s3, (struct sockaddr*) &server, sizeof(struct sockaddr_in));
             if (t == -1) {
@@ -204,7 +204,7 @@ int main(void) {
             for (i = 0; url[i] != ':' && url[i]; i++) ;
             url[i] = 0;
             char* port = url + i + 1;
-            printf("hostname: %s, port: %s", hostname, port);
+            printf("hostname: %s, port: %s\n", hostname, port);
 
             // Risolvo il nome.
             struct hostent* he = gethostbyname(hostname);
@@ -219,8 +219,8 @@ int main(void) {
 
             struct sockaddr_in server;
             server.sin_family = AF_INET;
-            server.sin_port = htons(atoi(port));
-            server.sin_addr.s_addr = *(unsigned*) (he->h_addr);
+            server.sin_port = htons((unsigned short) atoi(port));
+            server.sin_addr.s_addr = *(unsigned int*) (he->h_addr);
 
             t = connect(s3, (struct sockaddr*) &server, sizeof(struct sockaddr_in));
             if (t == -1) {
@@ -241,11 +241,17 @@ int main(void) {
                 while (t = read(s3, response2, 2000)) {
                     write(s2, response2, t);
                 }
+                kill(pid, SIGTERM);
+                close(s3);
             }
-            kill(pid, SIGTERM);
-            close(s3);
+        } else {
+            sprintf(response, "HTTP/1.1 501 Not Implemented\r\n\r\n");
+            write(s2, response, strlen(response));
         }
+        close(s2);
+        exit(0);
     }
+    close(s);
 
     return 0;
 }
