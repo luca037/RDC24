@@ -138,7 +138,7 @@ int main(void) {
 
             // Parsing dell'scheme, hostame e filename.
             // Riferimento: GET http://www.example.com/file/file, dove
-            //      scheme   = www.example.com
+            //      scheme   = http
             //      hostname = www.example.come
             //      filename = /file/file
             for (i = 0; url[i] != ':' && url[i]; i++) ;
